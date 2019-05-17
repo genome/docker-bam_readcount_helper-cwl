@@ -12,7 +12,11 @@ RUN apt-get update && \
         patch \
         python \
         python-pip \
-        git
+        git \
+        automake \
+        autoconf \
+        libbz2-dev \
+        liblzma-dev
 
 ENV SAMTOOLS_ROOT=/opt/samtools
 RUN mkdir /opt/bam-readcount
@@ -28,7 +32,19 @@ RUN git clone https://github.com/genome/bam-readcount.git /tmp/bam-readcount-0.7
 COPY bam_readcount_helper.py /usr/bin/bam_readcount_helper.py
 
 RUN pip install --upgrade pip
-RUN pip install cyvcf2
+
+RUN mkdir /opt/cyvcf2
+WORKDIR /opt/cyvcf2
+RUN git clone --recursive https://github.com/brentp/cyvcf2
+WORKDIR /opt/cyvcf2/cyvcf2/htslib
+RUN autoheader
+RUN autoconf
+RUN ./configure --enable-libcurl
+RUN make
+WORKDIR /opt/cyvcf2/cyvcf2
+RUN pip install -e .
+
+
 
 #clear inherited entrypoint
 ENTRYPOINT []
