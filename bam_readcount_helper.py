@@ -16,13 +16,13 @@ def generate_region_list(hash):
     fh.close()
     return fh.name
 
-def filter_sites_in_hash(region_list, bam_file, ref_fasta, sample, output_dir, insertion_centric, prefix, map_qual, base_qual):
+def filter_sites_in_hash(region_list, bam_file, ref_fasta, prefixed_sample, output_dir, insertion_centric, map_qual, base_qual):
     bam_readcount_cmd = ['/usr/bin/bam-readcount', '-f', ref_fasta, '-l', region_list, '-w', '0', '-b', str(base_qual), '-q', str(map_qual)]
     if insertion_centric:
         bam_readcount_cmd.append('-i')
-        output_file = os.path.join(output_dir, prefix + sample + '_bam_readcount_indel.tsv')
+        output_file = os.path.join(output_dir, prefixed_sample + '_bam_readcount_indel.tsv')
     else:
-        output_file = os.path.join(output_dir, prefix + sample + '_bam_readcount_snv.tsv')
+        output_file = os.path.join(output_dir, prefixed_sample + '_bam_readcount_snv.tsv')
     bam_readcount_cmd.append(bam_file)
     execution = Popen(bam_readcount_cmd, stdout=PIPE, stderr=PIPE)
     stdout, stderr = execution.communicate()
@@ -44,9 +44,9 @@ elif len(sys.argv) == 9: #elif instead of else for explicit safety
     (script_name, vcf_filename, sample, ref_fasta, bam_file, prefix, output_dir, min_base_qual, min_mapping_qual)= sys.argv
 
 if prefix == 'NOPREFIX':
-    prefix = ''
+    prefixed_sample = sample
 else:
-    prefix = prefix + '_'
+    prefixed_sample = '_'.join([prefix, sample])
 
 vcf_file = VCF(vcf_filename)
 sample_index = vcf_file.samples.index(sample)
@@ -101,14 +101,14 @@ for variant in vcf_file:
 
 if len(rc_for_snp.keys()) > 0:
     region_file = generate_region_list(rc_for_snp)
-    filter_sites_in_hash(region_file, bam_file, ref_fasta, sample, output_dir, False, prefix, min_mapping_qual, min_base_qual)
+    filter_sites_in_hash(region_file, bam_file, ref_fasta, prefixed_sample, output_dir, False, min_mapping_qual, min_base_qual)
 else:
-    output_file = os.path.join(output_dir, prefix + sample + '_bam_readcount_snv.tsv')
+    output_file = os.path.join(output_dir, prefixed_sample + '_bam_readcount_snv.tsv')
     open(output_file, 'w').close()
 
 if len(rc_for_indel.keys()) > 0:
     region_file = generate_region_list(rc_for_indel)
-    filter_sites_in_hash(region_file, bam_file, ref_fasta, sample, output_dir, True, prefix, min_mapping_qual, min_base_qual)
+    filter_sites_in_hash(region_file, bam_file, ref_fasta, prefixed_sample, output_dir, True, min_mapping_qual, min_base_qual)
 else:
-    output_file = os.path.join(output_dir, prefix + sample + '_bam_readcount_indel.tsv')
+    output_file = os.path.join(output_dir, prefixed_sample + '_bam_readcount_indel.tsv')
     open(output_file, 'w').close()
