@@ -9,6 +9,8 @@ RUN apt-get update && \
         cmake \
 	libcurl4-openssl-dev \
 	libssl-dev \
+        libbz2-dev \
+        liblzma-dev \
         patch \
         python \
         python-pip \
@@ -28,7 +30,7 @@ RUN git clone https://github.com/genome/bam-readcount.git /tmp/bam-readcount-0.7
 COPY bam_readcount_helper.py /usr/bin/bam_readcount_helper.py
 
 RUN pip install --upgrade pip
-RUN pip install cyvcf2
+RUN pip install cyvcf2==0.11.6
 
 #clear inherited entrypoint
 ENTRYPOINT []
