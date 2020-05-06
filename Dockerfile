@@ -7,8 +7,8 @@ LABEL \
 RUN apt-get update && \
     apt-get install -y \
         cmake \
-	libcurl4-openssl-dev \
-	libssl-dev \
+        libcurl4-openssl-dev \
+        libssl-dev \
         libbz2-dev \
         liblzma-dev \
         patch \
