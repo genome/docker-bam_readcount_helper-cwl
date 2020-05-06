@@ -9,8 +9,10 @@ FROM mgibio/samtools:1.3.1
 RUN apt-get update && \
     apt-get install -y \
         cmake \
-	libcurl4-openssl-dev \
-	libssl-dev \
+        libcurl4-openssl-dev \
+        libssl-dev \
+        libbz2-dev \
+        liblzma-dev \
         patch \
         python \
         python-pip \
@@ -30,10 +32,10 @@ RUN mkdir /opt/bam-readcount
 COPY bam_readcount_helper.py /usr/bin/bam_readcount_helper.py
 
 RUN pip install --upgrade pip
-RUN pip install cyvcf2
+RUN pip install cyvcf2==0.11.6
 
 #Import the bam-readcount executable from the seqfu image
-COPY --from=bam-readcount /bin/bam-readcount /opt/bam-readcount/
+COPY --from=seq-fu /bin/bam-readcount /opt/bam-readcount/
 
 #clear inherited entrypoint
 ENTRYPOINT []
