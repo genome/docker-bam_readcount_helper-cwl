@@ -1,8 +1,4 @@
-# xenial is the Ubuntu base for mgibio/samtools:1.3.1
-# but I am getting a build error, so using bionic.
-# The bam-readcount binary appears to work fine in the xenial
-# environment
-FROM ubuntu:bionic
+FROM ubuntu:focal
 
 # tzdata config from https://stackoverflow.com/a/47909037
 ENV DEBIAN_FRONTEND noninteractive
@@ -29,8 +25,11 @@ RUN cd / && \
     make
 
 
-FROM mgibio/samtools:1.3.1
+# By adding zlib1g-dev don't appear to need mgibio/samtools:1.3.1 as a base
+FROM ubuntu:focal
 MAINTAINER John Garza <johnegarza@wustl.edu>
+ENV DEBIAN_FRONTEND noninteractive
+ENV DEBCONF_NONINTERACTIVE_SEEN true
 
 LABEL \
     description="Image supporting the bam-readcount program"
@@ -42,12 +41,13 @@ RUN apt-get update && \
 	libssl-dev \
         patch \
         python \
-        python-pip \
+        python3-pip \
         git \
         automake \
         autoconf \
         libbz2-dev \
-        liblzma-dev
+        liblzma-dev \
+        zlib1g-dev
 
 ENV SAMTOOLS_ROOT=/opt/samtools
 RUN mkdir -p /opt/bam-readcount/bin
@@ -58,18 +58,19 @@ RUN ln -s /opt/bam-readcount/bin/bam-readcount /usr/bin/bam-readcount
 
 COPY bam_readcount_helper.py /usr/bin/bam_readcount_helper.py
 
-RUN pip install --upgrade pip
+#RUN pip install --upgrade pip
 
-RUN mkdir /opt/cyvcf2
-WORKDIR /opt/cyvcf2
-RUN git clone --recursive https://github.com/brentp/cyvcf2
-WORKDIR /opt/cyvcf2/cyvcf2/htslib
-RUN autoheader
-RUN autoconf
-RUN ./configure --enable-libcurl
-RUN make
-WORKDIR /opt/cyvcf2/cyvcf2
-RUN pip install -e .
+# RUN mkdir /opt/cyvcf2
+# WORKDIR /opt/cyvcf2
+# RUN git clone --recursive https://github.com/brentp/cyvcf2
+# WORKDIR /opt/cyvcf2/cyvcf2/htslib
+# RUN autoheader
+# RUN autoconf
+# RUN ./configure --enable-libcurl
+# RUN make
+# WORKDIR /opt/cyvcf2/cyvcf2
+# RUN pip3 install -e .
+RUN pip3 install cyvcf2
 
 
 
