@@ -40,7 +40,8 @@ RUN apt-get update && \
 	libcurl4-openssl-dev \
 	libssl-dev \
         patch \
-        python \
+        python-is-python3 \
+        python3 \
         python3-pip \
         git \
         automake \
@@ -71,7 +72,6 @@ COPY bam_readcount_helper.py /usr/bin/bam_readcount_helper.py
 # WORKDIR /opt/cyvcf2/cyvcf2
 # RUN pip3 install -e .
 RUN pip3 install cyvcf2
-
 
 
 #clear inherited entrypoint
