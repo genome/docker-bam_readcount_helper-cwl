@@ -1,4 +1,7 @@
-# Use the same Ubuntu base as mgibio/samtools:1.3.1
+# xenial is the Ubuntu base for mgibio/samtools:1.3.1
+# but I am getting a build error, so using bionic.
+# The bam-readcount binary appears to work fine in the xenial
+# environment
 FROM ubuntu:bionic
 
 # tzdata config from https://stackoverflow.com/a/47909037
