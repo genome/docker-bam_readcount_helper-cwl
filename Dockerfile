@@ -1,5 +1,5 @@
 # Use the same Ubuntu base as mgibio/samtools:1.3.1
-FROM ubuntu:xenial
+FROM ubuntu:bionic
 
 # tzdata config from https://stackoverflow.com/a/47909037
 ENV DEBIAN_FRONTEND noninteractive
@@ -50,7 +50,7 @@ ENV SAMTOOLS_ROOT=/opt/samtools
 RUN mkdir -p /opt/bam-readcount/bin
 
 WORKDIR /opt/bam-readcount
-COPY --from=0 /bam-readcount/build/bam-readcount /opt/bam-readcount/bin/bam-readcount
+COPY --from=0 /bam-readcount/build/bin/bam-readcount /opt/bam-readcount/bin/bam-readcount
 RUN ln -s /opt/bam-readcount/bin/bam-readcount /usr/bin/bam-readcount
 
 COPY bam_readcount_helper.py /usr/bin/bam_readcount_helper.py
