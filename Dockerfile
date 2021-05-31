@@ -16,7 +16,7 @@ RUN apt-get update && \
 RUN cd / && \
     git clone https://github.com/seqfu/bam-readcount && \
     cd bam-readcount && \
-    git checkout cram-v0.0.1 && \
+    git checkout cram-v0.0.2 && \
     0/populate_vendor.sh && \
     rm -rf build && \
     mkdir build && \
