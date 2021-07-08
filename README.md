@@ -1,7 +1,7 @@
 bam_readcount_helper-cwl
 ========================
 
-Docker image with `bam-readcount` and helper script
+Ubuntu Focal-based Docker image with `bam-readcount` and helper script
 
 
 Resources
@@ -18,5 +18,6 @@ Usage
 
     /usr/bin/bam-readcount
     /usr/bin/bam_readcount_helper.py
+
 
 
