@@ -14,10 +14,10 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* && rm -rf /tmp/* && rm -rf /var/tmp/*
 
 RUN cd / && \
-    git clone https://github.com/seqfu/bam-readcount && \
+    git clone https://github.com/genome/bam-readcount && \
     cd bam-readcount && \
-    git checkout cram-v0.0.2 && \
-    0/populate_vendor.sh && \
+    # For a specific tag enable the git checkout below
+    #git checkout cram-v0.0.2 && \
     rm -rf build && \
     mkdir build && \
     cd build && \
@@ -59,18 +59,6 @@ RUN ln -s /opt/bam-readcount/bin/bam-readcount /usr/bin/bam-readcount
 
 COPY bam_readcount_helper.py /usr/bin/bam_readcount_helper.py
 
-#RUN pip install --upgrade pip
-
-# RUN mkdir /opt/cyvcf2
-# WORKDIR /opt/cyvcf2
-# RUN git clone --recursive https://github.com/brentp/cyvcf2
-# WORKDIR /opt/cyvcf2/cyvcf2/htslib
-# RUN autoheader
-# RUN autoconf
-# RUN ./configure --enable-libcurl
-# RUN make
-# WORKDIR /opt/cyvcf2/cyvcf2
-# RUN pip3 install -e .
 RUN pip3 install cyvcf2
 
 
