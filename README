@@ -1,1 +1,33 @@
 Image containing bam-readcount and some extra files, for use in cwl workflows
+
+To update, build and push image:
+
+```
+#create a branch for the new version based on the most recent version
+git clone griffithlab/bam_readcount_helper-cwl:1.2.1
+cd bam_readcount_helper-cwl
+git checkout 1.2.0
+git checkout -b 1.2.1
+
+#make updates to the dockerfile
+#...
+
+#build the updated docker image
+docker build -t griffithlab/bam_readcount_helper-cwl:1.2.1 .
+
+#login to the docker image to test locally
+docker run --rm -it --entrypoint /bin/bash griffithlab/bam_readcount_helper-cwl:1.2.1
+
+#push the image to a dockerhub repo for testing
+docker login
+docker push griffithlab/bam_readcount_helper-cwl:1.2.1
+```
+
+One testing is complete, push the git branch to the genome repository.
+
+Once the branch is pushed an automated dockerbuild should happen that creates an image in the mgibio dockerhub:
+
+https://hub.docker.com/r/mgibio/bam_readcount_helper-cwl/tags
+
+
+
